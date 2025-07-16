@@ -1,0 +1,25 @@
+---
+- name: Install Indexers Splunk Enterprise
+  hosts: IDs
+  become: true
+
+  tasks:
+    - name: Ensure destination directory exists
+      ansible.builtin.file:
+      path: /opt
+      state: directory
+
+    - name: Extract Splunk Enterprise .tgz file
+      ansible.builtin.unarchive:
+        src: /home/ec2-user/splunk-9.4.2-e9664af3d956-linux-amd64.tgz
+        dest: /opt
+        remote_src: no
+      when: 
+        - not ansible.builtin.stat(path=/opt/splunk/etc).stat.exists
+      register: untar_result
+
+    - name: Debug extracted content
+      ansible.builtin.debug:
+        msg: "Unarchive successful: {{ untar_result.changed }}"
+      when: untar_result.changed
+
