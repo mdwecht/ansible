@@ -1,0 +1,11 @@
+---
+- name: Remove Indexers Splunk Enterprise
+  hosts: IDs
+  become: true
+
+  tasks:
+  
+    - name: Remove Splunk directory if it exists
+      file:
+        path: /opt/splunk
+        state: absent
